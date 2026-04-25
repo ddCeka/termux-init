@@ -5,3 +5,4 @@ megaloader @ file:///data/data/com.termux/files/home/termux-init/package/pip/meg
 megaloader-cli @ file:///data/data/com.termux/files/home/termux-init/package/pip/megaloader_cli-0.1.0.tar.gz#sha256=81e4974eeae1a270d95ba06398ed0b7c85c5fa0c8f3ebd6e3982654655f6f0ea
 unrpa @ file:///data/data/com.termux/files/home/termux-init/package/pip/unrpa-2.3.0.zip#sha256=b01041148dab480dd2be907f2ffef954352e5feaf5f2547b42035c1d9f74af59
 unrpyc @ file:///data/data/com.termux/files/home/termux-init/package/pip/unrpyc-2.0.4.tar.gz#sha256=2fe85cb9395f1d6db385f19dfd7cd6f70cb54e520f8dd8e4c1393c6ba9027139
+yapf @ file:///data/data/com.termux/files/home/termux-init/package/pip/yapf-0.43.0.tar.gz#sha256=00d3aa24bfedff9420b2e0d5d9f5ab6d9d4268e72afbf59bb3fa542781d5218e
