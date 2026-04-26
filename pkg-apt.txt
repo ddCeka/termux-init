@@ -10,6 +10,7 @@ gnupg
 htop
 jq
 mandoc
+perl-rename
 pup
 ripgrep
 sudo
@@ -29,6 +30,7 @@ zopfli
 # Editors/Viewers.
 micro
 ncdu2
+rumdl
 tmux
 
 # Media.
