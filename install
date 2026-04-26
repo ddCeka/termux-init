@@ -120,6 +120,17 @@ if [[ -f "$SCRIPT_DIR/pkg-${package}.txt" ]]; then
     fi
 fi
 
+if [[ -f "$PREFIX/bin/hashcat" ]]; then
+    cecho r "\n► Modify Hashcat LD_LIBRARY_PATH\n"
+    select strictreply in "Yes" "No"; do
+        relaxedreply=${strictreply:-$REPLY}
+        case $relaxedreply in
+            Yes | yes | y ) cp "$SCRIPT_DIR/hashcat" "$PREFIX/bin/hashcat"; break;;
+            No  | no  | n ) break;;
+        esac
+    done
+fi
+
 if [[ -f "$PREFIX/bin/7zz" ]]; then
     cecho r "\n► Create 7z symlink?\n"
     select strictreply in "Yes" "No"; do
