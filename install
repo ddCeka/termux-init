@@ -6,12 +6,6 @@ SCRIPT_DIR=$(dirname "$(realpath "$0")")
 local_repo=$HOME/.local/packages
 cleaner=$HOME/bin/termux-junk-cleaner
 
-# To check if Termux is being used
-if [ "$(pgrep -c com.termux)" -eq 0 ]; then
-	echo "please make sure that you are using termux, this script is only made for termux"
-	exit 0
-fi
-
 # Colours functions
 function cecho() {
     local code="\033["
