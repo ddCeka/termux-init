@@ -92,7 +92,6 @@ cloneit
 colordiff
 feedr
 fdupes
-mlocate
 onefetch
 qalc
 rlwrap
