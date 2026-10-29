@@ -46,11 +46,6 @@ monolith
 apkeditor
 apksigner
 apktool
-bc
-binutils
-bison
-busybox
-cmake
 expac
 gh
 git
@@ -60,18 +55,12 @@ git-delta
 git-extras
 git-lfs
 help2man
-iconv
-jq-lsp
 lazygit
-lua-language-server
-marksman
 mono
-ninja
 nodejs-lts
 openssh
 openssl-tool
 patchelf
-patchutils
 pcre
 php
 python
@@ -80,14 +69,11 @@ python-pip
 python-pynvim
 python2
 python-lxml
-python-yt-dlp
-rust
 termux-api
 termux-elf-cleaner
 update-info-dir
 uuid-utils
 xmlto
-yt-dlp-ejs
 
 # Misc.
 cloneit
