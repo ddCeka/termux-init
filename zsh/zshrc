@@ -61,6 +61,7 @@ fi
 
 # Git
 export GIT_CONFIG_GLOBAL=$HOME/.config/git/gitconfig
+export FILTER_BRANCH_SQUELCH_WARNING=1
 
 # openjdk
 # export JAVA_HOME=$PREFIX/lib/jvm/java-17-openjdk
@@ -106,6 +107,16 @@ export PARALLEL_HOME=$HOME/.config/parallel
 
 # hstr
 export HSTR_CONFIG=hicolor,prompt-bottom,raw-history-view
+hstr_no_tiocsti() {
+    zle -I
+    { HSTR_OUT="$( { </dev/tty hstr -- ${BUFFER}; } 2>&1 1>&3 3>&- )"; } 3>&1;
+    BUFFER="${HSTR_OUT}"
+    CURSOR=${#BUFFER}
+    zle redisplay
+}
+zle -N hstr_no_tiocsti
+bindkey '\C-r' hstr_no_tiocsti
+export HSTR_TIOCSTI=n
 
 # proxy
 # export PROXY=$HOME/.local/share/proxy/http.txt

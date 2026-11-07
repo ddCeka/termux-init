@@ -122,6 +122,7 @@ if [ -n "$(command -v apt)" ]; then
     alias crepo='termux-change-repo'
     alias listpkgbysize="dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n"
 elif [ -n "$(command -v pacman)" ]; then
+    alias full-up="pacman -Syu && pacman -Fy && pacman -Scc"
     alias create-pack='makepkg -fcsi' # Make package from PKGBUILD file in current directory.
     alias paconf="$editor '$PREFIX/etc/pacman.conf'"
     alias crepo="$editor '$PREFIX/etc/pacman.d/mirrorlist'"
@@ -184,7 +185,7 @@ alias sddb='updatedb --database-root /storage/emulated/0/ --output $HOME/.local/
 alias shck='shellcheck'
 alias py2='python2'
 alias py='python3'
-alias onefetch="onefetch --no-color-palette --no-art --nerd-fonts --no-bold"
+alias onefetch="onefetch --no-color-palette --no-art --nerd-fonts --no-bold --exclude '**/gradle/libs.versions.toml' '**/Cargo.lock' '**/Cargo.toml' '**/target/**' '**/CHANGELOG.md' '**/*.md' '**/*.txt' '**/*.json' '**/node_modules/**' '**/.github/**' '**/assets/**' '**/public/**'"
 alias patch-aapt="find ~/.local/gradle -name 'aapt2-*-linux.jar' -type f | xargs -I{} jar -uvf {} -C $HOME/.local/bin aapt2"
 alias patch-paudio="sed -i 's/module-sles-sink/module-aaudio-sink/g' $PREFIX/etc/pulse/default.pa"
 alias apksigned='apksigner sign --ks $HOME/.keystore/sign.keystore'
