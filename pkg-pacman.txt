@@ -81,6 +81,7 @@ colordiff
 feedr
 fdupes
 onefetch
+patchsplit
 qalc
 rlwrap
 shellcheck
