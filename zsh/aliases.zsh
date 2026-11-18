@@ -3,8 +3,8 @@
 ####         ####
 
 # Enable color support of ls, diff, grep, dir and bat
-if [[ -x $PREFIX/bin/dircolors ]]; then
-    test -r "$HOME"/.dircolors && eval "$(dircolors -b "$HOME"/.dircolors)" || eval "$(dircolors -b)"
+if [[ -x "$PREFIX/bin/dircolors" ]]; then
+    [[ -r "$HOME/.dircolors" ]] && eval "$(dircolors -b "$HOME/.dircolors")" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
     alias diff='diff --color=auto'
     alias egrep='grep -E --color=auto'
@@ -12,24 +12,22 @@ if [[ -x $PREFIX/bin/dircolors ]]; then
     alias grep='grep --color=auto'
     alias dir='dir --color=auto'
     alias vdir='vdir --color=auto -h'
-    alias bat='bat --color=always --paging=never'
 fi
 
 # Use 'neovim' (if installed)
-if [[ -x $PREFIX/bin/nvim ]]; then
+if [[ -x "$PREFIX/bin/nvim" ]]; then
     alias vi='nvim'
     alias vim='nvim'
 fi
 
 # Replace 'cat' with 'bat' (if available)
-if [[ -x $PREFIX/bin/bat ]]; then
+if [[ -x "$PREFIX/bin/bat" ]]; then
+    alias bat='bat --color=always --paging=never'
     alias cat='bat --color=always --decorations=never --paging=never'
-else
-    alias cat='cat'
 fi
 
 # Replace 'ls' with 'eza' (if available) + some aliases
-if [[ -x $PREFIX/bin/eza ]]; then
+if [[ -x "$PREFIX/bin/eza" ]]; then
     alias l='eza --color=auto --icons=auto'
     alias ls='eza --color=always --group-directories-first --icons=auto'
     alias l.='eza -d --color=auto --icons=auto .*'
@@ -53,8 +51,8 @@ else
     alias lsn='ls --color=auto | cat -n'
 fi
 
-# List all possible commands
-alias allcmd='compgen -c | less'
+# List all possible commands (Zsh-native replacement for Bash `compgen -c`)
+alias allcmd='print -rl -- ${(k)commands} | sort -u | less'
 
 # Common commands
 alias ..='cd ..'
@@ -67,13 +65,13 @@ alias .5='cd ../../../../..'
 alias .6='cd ../../../../../../'
 alias .7='cd ../../../../../../../'
 alias .8='cd ../../../../../../../../'
-alias cdusr='cd $PREFIX'
+alias cdusr='cd "$PREFIX"'
 alias mkdir='mkdir -p -v'
 alias rmd='rm -rfv'
 alias cpv='cp --preserve=all -v'
 alias cpr='cp --preserve=all -R'
 alias rsync='rsync -ahW --info=progress2'
-alias lincol='echo -e "lines\ncols" | tput -S'
+alias lincol='printf "lines\ncols\n" | tput -S'
 alias preview="fzf --preview='bat --squeeze-blank --color=always --style=full {}' --preview-window=down"
 alias q='clear && exit'
 alias logout='pkill termux'
@@ -85,12 +83,12 @@ alias free='free -mt'
 alias ps='ps -e'
 alias ht='htop'
 
-# Backup stuff
-alias tbkp='tar -czvf /storage/emulated/0/AppManager/bootstrap/home-backup.tar.xz -C /data/data/com.termux/files ./home'
-alias trstr='tar -xzvf /storage/emulated/0/AppManager/bootstrap/home-backup.tar.xz -C /data/data/com.termux/files --recursive-unlink --preserve-permissions'
-alias etcb='cd $PREFIX/etc && tar czvf etcb.tar.xz motd php termux-login.sh && mv etcb.tar.xz $HOME/bootstrap && cd $HOME'
+# Backup stuff (matched -J xz flags with .tar.xz filenames)
+alias tbkp='tar -cJvf /storage/emulated/0/AppManager/bootstrap/home-backup.tar.xz -C /data/data/com.termux/files ./home'
+alias trstr='tar -xJvf /storage/emulated/0/AppManager/bootstrap/home-backup.tar.xz -C /data/data/com.termux/files --recursive-unlink --preserve-permissions'
+alias etcb='mkdir -p "$HOME/bootstrap" && tar -cJvf "$HOME/bootstrap/etcb.tar.xz" -C "$PREFIX/etc" motd php termux-login.sh'
 
-# Calender
+# Calendar
 alias jan='cal -m January'
 alias feb='cal -m February'
 alias mar='cal -m March'
@@ -115,39 +113,39 @@ alias pkgsw='pkg show'
 alias papc='pkg autoclean && pkg clean'
 
 # Package manager specific
-if [ -n "$(command -v apt)" ]; then
+if command -v apt >/dev/null 2>&1; then
     alias pkguc='pkg update && apt list --upgradable -a'
     alias pupg='pkg update && pkg upgrade'
     alias create-pack='termux-create-package'
     alias crepo='termux-change-repo'
-    alias listpkgbysize="dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n"
-elif [ -n "$(command -v pacman)" ]; then
-    alias full-up="pacman -Syu && pacman -Fy && pacman -Scc"
-    alias create-pack='makepkg -fcsi' # Make package from PKGBUILD file in current directory.
-    alias paconf="$editor '$PREFIX/etc/pacman.conf'"
-    alias crepo="$editor '$PREFIX/etc/pacman.d/mirrorlist'"
-    alias pacupg='pacman -Syu' # Synchronize with repositories and then upgrade packages that are out of date on the local system.
-    alias pacupd='pacman -Sy' # Refresh of all package lists after updating /etc/pacman.d/mirrorlist.
-    alias pacupdb='pacman -Sy && pacman -Fy' # Refresh all package(s) record on local database.
-    alias pacin='pacman -S' # Install specific package(s) from the repositories.
-    alias pacdl='pacman -Sw' # Download package(s) without installing.
-    alias pacis='pacman -Fy' # Sync the files database to local.
-    alias pacinu='pacman -U' # Install specific local package(s).
-    alias pacre='pacman -R' # Remove the specified package(s), retaining its configuration(s) and required dependencies.
-    alias pacun='pacman -Rcns' # Remove the specified package(s), its configuration(s) and unneeded dependencies.
-    alias pacinfo='pacman -Qi' # Display information about a given package in the database.
-    alias pacview='pacman -Si' # Display information about a given package in the repositories.
-    alias pacse='pacman -Ss' # Search for package(s) in the repositories.
-    alias pacinde='pacman -S --asdeps' # Install given package(s) as dependencies of another package.
-    alias pacclean='pacman -Sc' # Delete all not currently installed package files.
-    alias pacpurge='pacman -Scc' # Delete all cache package files and clean up database repository.
+    alias listpkgbysize='dpkg-query -Wf '\''${Installed-Size}\t${Package}\n'\'' | sort -n'
+elif command -v pacman >/dev/null 2>&1; then
+    alias fup='pacman -Syu && pacman -Fy && pacman -Scc'
+    alias create-pack='makepkg -fcsi'
+    alias paconf='$EDITOR "$PREFIX/etc/pacman.conf"'
+    alias crepo='$EDITOR "$PREFIX/etc/pacman.d/mirrorlist"'
+    alias pacupg='pacman -Syu'
+    alias pacupd='pacman -Sy'
+    alias pacupdb='pacman -Sy && pacman -Fy'
+    alias pacin='pacman -S'
+    alias pacdl='pacman -Sw'
+    alias pacis='pacman -Fy'
+    alias pacinu='pacman -U'
+    alias pacre='pacman -R'
+    alias pacun='pacman -Rcns'
+    alias pacinfo='pacman -Qi'
+    alias pacview='pacman -Si'
+    alias pacse='pacman -Ss'
+    alias pacinde='pacman -S --asdeps'
+    alias pacclean='pacman -Sc'
+    alias pacpurge='pacman -Scc'
     alias listpkgdepend="expac -S '%D'"
     alias listpkgopti="expac -S '%o'"
     alias listpkgbysize="expac -H M '%m\t%n' | sort -h"
     alias listpkgbydate="expac --timefmt='%d-%m-%Y %T' '%l\t%n' | sort -h"
-    alias listpkgupdate="expac -S -H M '%k\t%n' $(pacman -Qqu) | sort -sh"
+    alias listpkgupdate='expac -S -H M "%k\t%n" $(pacman -Qqu) | sort -sh'
     alias ceklastupd="expac --timefmt='%d-%m-%Y %T' '%l\t%n' | sort | tail -n 20"
-    alias listpkgother="comm -23 <(pacman -Qq | sort) <(pacman -Sql main | sort)"
+    alias listpkgother='comm -23 <(pacman -Qq | sort) <(pacman -Sql main | sort)'
 fi
 
 # Custom scripts
@@ -165,44 +163,44 @@ alias ccc='create-conventional-changelog'
 alias ddl='dead-domains-linter'
 
 # Applications shortcuts
-alias tprop="$editor '$HOME/.termux/termux.properties'"
+alias tprop='$EDITOR "$HOME/.termux/termux.properties"'
 alias cclean='rm -rf "$HOME/.cache" "$HOME/app/logs/cleaner-log.txt"'
-alias bclean='rm -rf "$HOME/build" && mkdir build'
-alias pclean='killall -9 com.termux.api gpg-agent pulseaudio ssh-agent termux-wake-lock'
-alias ebashrc="$editor '$HOME/.config/bash/bashrc'"
-alias ebashal="$editor '$HOME/.config/bash/aliases.bash'"
-alias ebashfu="$editor '$HOME/.config/bash/functions.bash'"
-alias ezshrc="$editor '$HOME/.config/zsh/zshrc'"
-alias ezshal="$editor '$HOME/.config/zsh/aliases.zsh'"
-alias ezshfu="$editor '$HOME/.config/zsh/functions.zsh'"
+alias bclean='rm -rf "$HOME/build" && mkdir -p "$HOME/build"'
+alias pclean='killall -9 com.termux.api gpg-agent pulseaudio ssh-agent termux-wake-lock 2>/dev/null'
+alias ebashrc='$EDITOR "$HOME/.config/bash/bashrc"'
+alias ebashal='$EDITOR "$HOME/.config/bash/aliases.bash"'
+alias ebashfu='$EDITOR "$HOME/.config/bash/functions.bash"'
+alias ezshrc='$EDITOR "$HOME/.config/zsh/zshrc"'
+alias ezshal='$EDITOR "$HOME/.config/zsh/aliases.zsh"'
+alias ezshfu='$EDITOR "$HOME/.config/zsh/functions.zsh"'
 alias timenow='date +"%R"'
 alias datenow='date +"%A, %d %b %m %Y"'
-alias untar='tar xzvf'
-alias ctar='tar czvf'
+alias untar='tar -xzvf'
+alias ctar='tar -czvf'
 alias wget='wget -c'
-alias e="$editor"
-alias sddb='updatedb --database-root /storage/emulated/0/ --output $HOME/.local/state/locate/sdcard.db'
+alias e='$EDITOR'
+alias sddb='updatedb --database-root /storage/emulated/0/ --output "$HOME/.local/state/locate/sdcard.db"'
 alias shck='shellcheck'
 alias py2='python2'
 alias py='python3'
-alias onefetch="onefetch --no-color-palette --no-art --nerd-fonts --no-bold --exclude '**/gradle/libs.versions.toml' '**/Cargo.lock' '**/Cargo.toml' '**/target/**' '**/CHANGELOG.md' '**/*.md' '**/*.txt' '**/*.json' '**/node_modules/**' '**/.github/**' '**/assets/**' '**/public/**'"
-alias patch-aapt="find ~/.local/gradle -name 'aapt2-*-linux.jar' -type f | xargs -I{} jar -uvf {} -C $HOME/.local/bin aapt2"
+alias onefetch="onefetch --no-color-palette --no-art --nerd-fonts --no-bold --exclude '**/gradle/libs.versions.toml' --exclude '**/Cargo.lock' --exclude '**/Cargo.toml' --exclude '**/target/**' --exclude '**/CHANGELOG.md' --exclude '**/*.md' --exclude '**/*.txt' --exclude '**/*.json' --exclude '**/node_modules/**' --exclude '**/.github/**' --exclude '**/assets/**' --exclude '**/public/**'"
+alias patch-aapt="find ~/.local/gradle -name 'aapt2-*-linux.jar' -type f | xargs -r -I{} jar -uvf {} -C $HOME/.local/bin aapt2"
 alias patch-paudio="sed -i 's/module-sles-sink/module-aaudio-sink/g' $PREFIX/etc/pulse/default.pa"
-alias apksigned='apksigner sign --ks $HOME/.keystore/sign.keystore'
+alias apksigned='apksigner sign --ks "$HOME/.keystore/sign.keystore"'
 alias zipalcv='zipalign -c -v 4'
 alias qalc='qalc -color'
-alias localb='git -C $HOME/build pull'
+alias localb='git -C "$HOME/build" pull'
 alias decolorize='sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,3})*)?[mGK]//g"'
-alias wifikey='sudo grep -r "string name=" /data/misc/wifi/WifiConfigStore.xml' # Each phone different.
+alias wifikey='sudo grep -r "string name=" /data/misc/wifi/WifiConfigStore.xml'
 
 # Git
-alias gite="$editor '$HOME/.config/git/gitconfig'"
-alias gitel="$editor '$HOME/.config/git/gitconfig.local'"
-alias gitei="$editor '$HOME/.config/git/gitignore'"
-alias gitab="$editor '$HOME/.config/git/gitattributes'"
-alias gital="$editor '$HOME/.config/git/gitconfig.alias'"
-alias githem="$editor '$HOME/.config/git/gitconfig.themes'"
-alias me="$editor 'README.md'"
+alias gite='$EDITOR "$HOME/.config/git/gitconfig"'
+alias gitel='$EDITOR "$HOME/.config/git/gitconfig.local"'
+alias gitei='$EDITOR "$HOME/.config/git/gitignore"'
+alias gitab='$EDITOR "$HOME/.config/git/gitattributes"'
+alias gital='$EDITOR "$HOME/.config/git/gitconfig.alias"'
+alias githem='$EDITOR "$HOME/.config/git/gitconfig.themes"'
+alias me='$EDITOR "README.md"'
 alias rdm='cat README.md'
 alias cglg='cat CHANGELOG.md'
 alias lg='lazygit'
@@ -215,15 +213,15 @@ alias gpf="git push --force"
 alias gss="git status -s"
 alias gsd="git status -s && git diff HEAD"
 alias gbrr="git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format='%(refname:short)'"
-alias gcm='git checkout $(git_main_branch)'
+alias gcm='git checkout $(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed "s@^refs/remotes/origin/@@" || echo main)'
 alias gcma="git commit --amend -m"
 alias gcman="git commit --amend --no-edit"
 alias gcmn="git add . && git commit --amend --no-edit"
 alias gdh="git diff HEAD"
-alias ghkey='gh ssh-key add $HOME/.ssh/id_ed25519.pub --title "$(hostname)" --type signing'
+alias ghkey='gh ssh-key add "$HOME/.ssh/id_ed25519.pub" --title "$(hostname)" --type signing'
 alias ghpr="gh pr create"
-alias ghpd="pr-diff"
-alias ghpf="pr-files"
+alias ghpd="pr_diff"
+alias ghpf="pr_files"
 alias ghrc="gh repo clone"
 alias ghrd="gh repo edit -d"
 alias ghrh="gh repo edit -h"
