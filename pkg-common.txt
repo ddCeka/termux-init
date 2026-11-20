@@ -60,7 +60,6 @@ nodejs-lts
 openssl-tool
 patchelf
 pcre
-php
 python
 python-lxml
 python-pynvim
