@@ -86,7 +86,7 @@ alias ht='htop'
 # Backup stuff (matched -J xz flags with .tar.xz filenames)
 alias tbkp='tar -cJvf /storage/emulated/0/AppManager/bootstrap/home-backup.tar.xz -C /data/data/com.termux/files ./home'
 alias trstr='tar -xJvf /storage/emulated/0/AppManager/bootstrap/home-backup.tar.xz -C /data/data/com.termux/files --recursive-unlink --preserve-permissions'
-alias etcb='mkdir -p "$HOME/bootstrap" && tar -cJvf "$HOME/bootstrap/etcb.tar.xz" -C "$PREFIX/etc" motd php termux-login.sh'
+alias etcb='tar -cJvf "$HOME/bootstrap/etcb.tar.xz" -C "$PREFIX/etc" motd termux-login.sh'
 
 # Calendar
 alias jan='cal -m January'
