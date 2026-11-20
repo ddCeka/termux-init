@@ -371,7 +371,7 @@ function gg() {
             git config --global color.diff auto
             git config --global diff.color true
             git config --global core.filemode true
-            git config --global push.default current
+            git config --global push.default simple
             git config --global core.editor "$EDITOR_CFG"
             git config --global format.signoff true
             git config --global alias.reset 'reset --soft HEAD^'

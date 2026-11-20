@@ -121,7 +121,7 @@ if command -v apt >/dev/null 2>&1; then
     alias listpkgbysize='dpkg-query -Wf '\''${Installed-Size}\t${Package}\n'\'' | sort -n'
 elif command -v pacman >/dev/null 2>&1; then
     alias fup='pacman -Syu && pacman -Fy && pacman -Scc'
-    alias create-pack='makepkg -fcsi'
+    alias create-pack='termux-create-package --pacman'
     alias paconf='$EDITOR "$PREFIX/etc/pacman.conf"'
     alias crepo='$EDITOR "$PREFIX/etc/pacman.d/mirrorlist"'
     alias pacupg='pacman -Syu'

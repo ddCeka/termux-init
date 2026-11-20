@@ -150,11 +150,12 @@ export HISTORY_IGNORE="(ls|ll|la|l|bg|fg|history|hh|quit|q|clear|c|help|h|logout
 
 # Appearances
 export TERM="xterm-256color"
-export LANGUAGE="C.UTF-8"
-export LANG="C.UTF-8"
-export LC_ALL="C.UTF-8"
-export LC_CTYPE="C.UTF-8"
-export LC_MESSAGES="C.UTF-8"
+# Only used this on desktop
+# export LANGUAGE="C.UTF-8"
+# export LANG="C.UTF-8"
+# export LC_ALL="C.UTF-8"
+# export LC_CTYPE="C.UTF-8"
+# export LC_MESSAGES="C.UTF-8"
 
 # Custom completions & fast cached compinit (runs BEFORE plugins)
 fpath=("$HOME/.local/share/scripts/site-functions" "${fpath[@]}")
