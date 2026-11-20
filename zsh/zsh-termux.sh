@@ -77,20 +77,24 @@ curl -fsSL -o ~/.config/zsh/functions.zsh https://raw.githubusercontent.com/ddCe
 cat << 'EOF' >> ~/.zshrc
 
 # Custom additions (Termux)
-source $HOME/.config/zsh/powerlevel10k/powerlevel10k.zsh-theme
-source $HOME/.config/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-source $HOME/.config/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh
-source $HOME/.config/zsh/plugins/completion.zsh
-source $HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
-source $HOME/.config/zsh/plugins/history.zsh
-source $HOME/.config/zsh/plugins/key-bindings.zsh
-source $HOME/.config/zsh/plugins/you-should-use.zsh
+source "$HOME/.config/zsh/powerlevel10k/powerlevel10k.zsh-theme"
+source "$HOME/.config/zsh/plugins/completion.zsh"
+source "$HOME/.config/zsh/plugins/history.zsh"
+source "$HOME/.config/zsh/plugins/key-bindings.zsh"
+source "$HOME/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
+source "$HOME/.config/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.plugin.zsh"
+source "$HOME/.config/zsh/plugins/you-should-use.zsh"
+# fast-syntax-highlighting MUST be sourced last so it wraps all ZLE widgets properly
+source "$HOME/.config/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 
 # Aliases
-source $HOME/.config/zsh/aliases.zsh
+[[ -f "$HOME/.config/zsh/aliases.zsh" ]] && source "$HOME/.config/zsh/aliases.zsh"
 
 # Functions
-source $HOME/.config/zsh/functions.zsh
+[[ -f "$HOME/.config/zsh/functions.zsh" ]] && source "$HOME/.config/zsh/functions.zsh"
+
+# Shell integration
+[[ -f "$HOME/.local/share/scripts/shell-integration/integration.sh" ]] && source "$HOME/.local/share/scripts/shell-integration/integration.sh"
 
 EOF
 
