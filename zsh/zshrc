@@ -195,6 +195,31 @@ source "$HOME/.config/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlight
 # Shell integration
 [[ -f "$HOME/.local/share/scripts/shell-integration/integration.sh" ]] && source "$HOME/.local/share/scripts/shell-integration/integration.sh"
 
+# Block non-existent commands (typos) from ever entering history
+zshaddhistory() {
+    emulate -L zsh
+    [[ "$1" == [[:space:]]* ]] && return 1
+    local line="${1%$'\n'}"
+    [[ -n "$HISTORY_IGNORE" && "$line" == ${~HISTORY_IGNORE} ]] && return 1
+
+    # Extract the first word (ignoring leading env vars like FOO=bar)
+    local -a words=(${(z)line})
+    local cmd=""
+    for w in "${words[@]}"; do
+        if [[ "$w" != *=* ]]; then
+            cmd="$w"
+            break
+        fi
+    done
+
+    # If the command/alias/function/builtin doesn't exist, don't save it
+    if [[ -n "$cmd" ]] && ! whence "$cmd" >/dev/null 2>&1 && [[ ! -d "$cmd" ]]; then
+        return 1
+    fi
+
+    return 0
+}
+
 export PATH
 PROMPT_EOL_MARK=""
 last_repository=
